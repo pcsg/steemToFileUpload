@@ -1,0 +1,171 @@
+body {
+    background: #f1f1ee;
+    font-family: Arial, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    margin: 0;
+    padding: 0;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+#page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#page-main {
+    flex: 1 1 auto;
+}
+
+.header {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.header .upload {
+    background-color: #5eba00;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #5eba00;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    width: 200px;
+}
+
+.header .upload:hover {
+    color: #fff;
+    background-color: #4b9400;
+    border-color: #448700;
+}
+
+.header .upload:focus {
+    box-shadow: 0 0 0 2px rgba(94, 186, 0, 0.5);
+}
+
+/** Files
+ =================================================== */
+
+.files {
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    display: block;
+    margin: 40px auto 0;
+    max-width: 90%;
+    width: 500px;
+}
+
+.files table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.files table thead th {
+    border-top: 0;
+    border-bottom: 1px solid #dee2e6;
+    color: #9aa0ac;
+    font-size: 0.7rem;
+    font-weight: 400;
+    padding: 0.8rem 0.75rem;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: bottom;
+}
+
+.files tr td:first-child,
+.files tr th:first-child {
+    padding-left: 1.5rem;
+}
+
+.files tr:first-child td,
+.files tr:first-child th {
+    border-top: 0;
+}
+
+.files td {
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.files tr:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.files button.download {
+    background: #fff;
+    color: #467fcf;
+    cursor: pointer;
+    border: 2px solid #467fcf;
+    border-radius: 3px;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+}
+
+.files button.download:hover {
+    background: #467fcf;
+    color: #fff;
+}
+
+/** Footer
+ =================================================== */
+
+footer {
+    background: #fff;
+    border-top: 1px solid rgba(0, 40, 100, 0.12);
+    color: #9aa0ac;
+    font-size: 0.875rem;
+    padding: 1.25rem 0;
+    text-align: right;
+}
+
+footer a {
+    color: #467fcf;
+    padding: 0 10px;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    width: 100%;
+}
+
+@media (max-width: 1280px) {
+    .container {
+        max-width: 1200px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
