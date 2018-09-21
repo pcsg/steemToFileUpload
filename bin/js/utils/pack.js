@@ -12,7 +12,22 @@ const hex2bin = str => str.match(/.{1,2}/g).reduce((str, hex) => str += String.f
 const bin2hex = str => str.split('').reduce((str, glyph) => str += glyph.charCodeAt().toString(16).length < 2 ? `0${glyph.charCodeAt().toString(16)}`
     : glyph.charCodeAt().toString(16), '');
 
+
+const binaryBuffer = function (bin) {
+    let length = bin.length;
+    let buf    = new ArrayBuffer(length);
+    let arr    = new Uint8Array(buf);
+
+    for (let i = 0; i < length; i++) {
+        arr[i] = bin.charCodeAt(i);
+    }
+
+    return buf;
+};
+
+
 export {
     bin2hex,
-    hex2bin
+    hex2bin,
+    binaryBuffer
 };

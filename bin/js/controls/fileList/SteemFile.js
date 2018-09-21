@@ -1,7 +1,12 @@
 "use strict";
 
 import SteemFiles from '../../classes/SteemFiles';
-import {hex2bin} from '../../utils/pack';
+
+import {
+    hex2bin,
+    binaryBuffer
+} from '../../utils/pack';
+
 import {debugNode} from "../../utils/debug";
 
 /**
@@ -97,17 +102,19 @@ class SteemFile {
         SteemFiles.getComments(author, permlink).then(comments => {
             let fileContent = '';
 
-            console.log('File parts ' + comments.length);
-
             for (let i = 0, len = comments.length; i < len; i++) {
                 fileContent = fileContent + comments[i].body;
             }
 
-            let blob = new Blob([hex2bin(fileContent)], {
+            let binary = hex2bin(fileContent);
+            let array  = binaryBuffer(binary);
+
+            console.info('!! Hex length: ' + fileContent.length);
+
+            let blob = new Blob([array], {
                 type: jsonMetaData.mime_type
             });
 
-            console.log(blob);
             //debugNode(fileContent);
             download(blob, this.data.root_title);
 

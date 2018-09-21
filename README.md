@@ -1,4 +1,4 @@
-STEEM to File Upload (STFU)
+STEEM To File Upload
 ======
 
 This is the first real file upload client for the STEEM Blockchain

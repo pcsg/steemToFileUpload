@@ -12,7 +12,7 @@ class Upload {
 
     constructor() {
         this.Input      = null;
-        this.partLength = 10000; // test net = 10000, live net = 200000
+        this.partLength = 15000;   // test net = 10000, live net = 200000
         this.timeDelay  = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
 
         this.blockSizeReachedDelay = 60000;   // test net = 60000
@@ -48,13 +48,15 @@ class Upload {
         // Closure to capture the file information.
         Reader.addEventListener('load', function () {
             let array  = new Uint8Array(this.result);
-            let binary = JSON.stringify(array, null, '  ');
+            let binary = String.fromCharCode.apply(null, array);
             let hex    = bin2hex(binary);
 
+            console.info('!! Hex length: ' + hex.length);
+            console.info('!! Bin length: ' + binary.length);
             console.log('File loaded and read');
 
             // start first post
-            console.log('Create Post');
+            console.log('Start creating post');
 
             SteemUpload.createFilePost(files[0].name, {
                 mime_type: files[0].type,
