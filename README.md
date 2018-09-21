@@ -18,7 +18,7 @@ Older browsers are therefore not supported.
 We recommend: 
 
 - Chrome 69 and higher
-- Firefox 62 and height
+- Firefox 62 and higher
 - Edge
 
 
