@@ -9,6 +9,18 @@ Preview
 
 ![Preview](images/steemToFileUpload-Preview.png)
 
+Requirements / Browser support
+------
+
+This app is developed on the latest browser standards. 
+Older browsers are therefore not supported.
+
+We recommend: 
+
+- Chrome 69 and higher
+- Firefox 62 and height
+- Edge
+
 
 Goal
 ------
@@ -33,6 +45,7 @@ which guarantee a correct use. In the next days / weeks these will be integrated
 - [ ] File upload resume
 - [ ] More mime type icons
 - [ ] Little bit code cleanup
+- [ ] Browser compatibility
 
 
 What was learned
