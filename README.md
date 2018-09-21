@@ -4,6 +4,8 @@ STEEM To File Upload
 This is the first real file upload client for the STEEM Blockchain
 This app was developed during the Utopian [Hackathon](https://steemit.com/fundition-ffdnxgdga/@steemstem/utopian-hackathon-revealing-date-topic-prizes-and-more-details-on-the-first-utopian-io-community-hackathon) by dehenne and mordark.
 
+*The app is currently using the testnet*
+
 Preview
 ------
 
