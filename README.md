@@ -39,13 +39,14 @@ which guarantee a correct use. In the next days / weeks these will be integrated
 
 - [ ] Compression of the uploaded files
 - [ ] Login window
-- [ ] Upload hints - user must see the upload progress
+- [ ] Upload progress bar - user must see the upload progress
 - [ ] Real dApp
 - [ ] Pagination of the file list
 - [ ] File upload resume
 - [ ] More mime type icons
 - [ ] Little bit code cleanup
 - [ ] Browser compatibility
+- [ ] Fine tuning of the file parameters
 
 
 What was learned
