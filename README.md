@@ -32,6 +32,7 @@ which guarantee a correct use. In the next days / weeks these will be integrated
 - [ ] Pagination of the file list
 - [ ] File upload resume
 - [ ] More mime type icons
+- [ ] Little bit code cleanup
 
 
 What was learned
