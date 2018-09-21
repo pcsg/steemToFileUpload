@@ -9,6 +9,8 @@ Preview
 
 ![Preview](images/steemToFileUpload-Preview.png)
 
+![Preview](images/steemToFileUpload-Preview-Login.png)
+
 Requirements / Browser support
 ------
 
