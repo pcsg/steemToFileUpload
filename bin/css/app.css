@@ -49,6 +49,13 @@ body {
     box-shadow: 0 0 0 2px rgba(94, 186, 0, 0.5);
 }
 
+.header .upload:disabled {
+    background-color: #dedede;
+    border: 1px solid #bbb;
+    color: #bbb;
+    cursor: not-allowed;
+}
+
 /** Files
  =================================================== */
 

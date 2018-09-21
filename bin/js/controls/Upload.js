@@ -1,8 +1,11 @@
 "use strict";
 
 import SteemUpload from "../classes/SteemUpload";
+import Login from "./Login.js";
+
 import promiseDelay from "../utils/promiseDelay";
 import {bin2hex} from '../utils/pack';
+
 import {debugNode} from '../utils/debug';
 
 /**
@@ -22,6 +25,16 @@ class Upload {
      * Opens the upload
      */
     open() {
+        if (window.STEEM_USER === '' || window.STEEM_PASS === '') {
+            new Login({
+                events: {
+                    onSuccess: this.open.bind(this)
+                }
+            }).open();
+
+            return;
+        }
+
         if (!this.Input) {
             this.Input      = document.createElement('input');
             this.Input.type = 'file';

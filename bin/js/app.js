@@ -11,10 +11,12 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 // ===============================================================
 
 // live
+window.STEEM_USER = '';
+window.STEEM_PASS = '';
 
 // testnet
-window.STEEM_USER = 'foo-test';
-window.STEEM_PASS = 'foo-bar-4321';
+// window.STEEM_USER = 'foo-test';
+// window.STEEM_PASS = 'foo-bar-4321';
 
 window.Client = new dsteem.Client('https://testnet.steem.vc', {
     addressPrefix: 'STX',

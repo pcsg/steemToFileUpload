@@ -1,0 +1,52 @@
+.login-background {
+    background: rgba(0, 0, 0, 0.2);
+    display: grid;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.login-main {
+    align-self: center;
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    height: 400px;
+    justify-self: center;
+    margin: 0 auto;
+    max-width: 90%;
+    padding: 20px;
+    top: 0;
+    width: 500px;
+    z-index: 2;
+}
+
+.login-main h1 {
+    color: #666666;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.login-main label,
+.login-main label span {
+    clear: both;
+    display: inline-block;
+    width: 100%;
+}
+
+.login-main input {
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.login-main label {
+    margin-bottom: 20px;
+}
