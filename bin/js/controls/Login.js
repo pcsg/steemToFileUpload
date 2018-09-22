@@ -109,21 +109,19 @@ class Login {
      * @reutrn {Promise}
      */
     close() {
-        Velocity(this.Main, {
+        return Velocity(this.Main, {
             marginTop: '-50px',
             opacity: 0
         }, {
             duration: 350,
             easing: "easeOutQuint"
+        }).promise.then(() => {
+            return Velocity(this.Background, {
+                opacity: 0
+            }).promise.then(() => {
+                this.Background.parentNode.removeChild(this.Background);
+            });
         });
-
-        Velocity(this.Background, {
-            opacity: 0
-        });
-
-        setTimeout(() => {
-            this.Background.parentNode.removeChild(this.Background);
-        }, 500);
     }
 
     //endregion
@@ -139,20 +137,49 @@ class Login {
             // check wif
             let postingKey = dsteem.PrivateKey.fromLogin(username, password, 'posting');
 
-            // @todo check postingKey
-            console.log(username, password);
+            this.checkAuthentication(username, postingKey).then((isAuthenticated) => {
+                if (isAuthenticated === false) {
+                    this.hideLoading().then(() => {
+                        this.open().catch(() => {
+                        });
+                    });
+                    return;
+                }
 
-            document.querySelector('.upload button').innerHTML = `
-                <span class="fa fa-upload"></span>
-                <span class="upload-text">Upload</span>
-            `;
+                document.querySelector('.upload button').innerHTML = `
+                    <span class="fa fa-upload"></span>
+                    <span class="upload-text">Upload</span>
+                `;
 
-            window.STEEM_USER = username;
-            window.STEEM_PASS = password;
+                window.STEEM_USER = username;
+                window.STEEM_PASS = password;
 
-            this.hideLoading();
-            this.onSuccess();
+                this.hideLoading();
+                this.onSuccess();
+            });
         });
+    }
+
+    /**
+     *
+     * @param username
+     * @param postingKey
+     * @returns {PromiseLike<T | never> | Promise<T | never>}
+     */
+    checkAuthentication(username, postingKey) {
+        return window.Client.database.getAccounts([username]).then(function (result) {
+            if (result.length === 0) {
+                return false;
+            }
+
+            let publicPostingKey = result[0].posting.key_auths[0][0];
+            let createdPub = postingKey.createPublic(window.STEEM_PRFX).toString();
+
+            return publicPostingKey === createdPub;
+        }, function () {
+            return false;
+        });
+
     }
 
     //region loader

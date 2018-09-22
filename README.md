@@ -42,7 +42,7 @@ Since this app was cut together under time pressure some functions are missing
 which guarantee a correct use. In the next days / weeks these will be integrated.
 
 - [ ] Compression of the uploaded files
-- [ ] Login window
+- [x] Login window
 - [ ] Upload progress bar - user must see the upload progress
 - [ ] Real dApp
 - [ ] Pagination of the file list

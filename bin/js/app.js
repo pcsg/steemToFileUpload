@@ -18,8 +18,10 @@ window.STEEM_PASS = '';
 // window.STEEM_USER = 'foo-test';
 // window.STEEM_PASS = 'foo-bar-4321';
 
+window.STEEM_PRFX = 'STX';
+
 window.Client = new dsteem.Client('https://testnet.steem.vc', {
-    addressPrefix: 'STX',
+    addressPrefix: window.STEEM_PRFX,
     chainId: '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
 });
 
