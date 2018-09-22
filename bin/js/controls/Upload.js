@@ -2,9 +2,10 @@
 
 import SteemUpload from "../classes/SteemUpload";
 import Login from "./Login.js";
+import FileUploadDisplay from "./FileUploadDisplay.js";
 
 import promiseDelay from "../utils/promiseDelay";
-import {bin2hex} from '../utils/pack';
+import {bin2hex, convertUint8ArrayToBinaryString} from '../utils/pack';
 
 import {debugNode} from '../utils/debug';
 
@@ -77,11 +78,32 @@ class Upload {
 
         let CurrentFile = files[0];
         let Reader = new FileReader();
+        let FileDisplay = new FileUploadDisplay();
+
+        FileDisplay.show();
+        FileDisplay.setTitle('Loading file');
 
         // Closure to capture the file information.
         Reader.addEventListener('load', function () {
-            let array = new Uint8Array(this.result);
-            let binary = String.fromCharCode.apply(null, array);
+            let binary = '';
+
+            try {
+                let array = new Uint8Array(this.result);
+                //let binary = String.fromCharCode.apply(null, array);
+                binary = convertUint8ArrayToBinaryString(array);
+            } catch (e) {
+                FileDisplay.hide().catch(() => {
+                });
+                console.error(e);
+                return;
+            }
+
+            if (binary === '') {
+                FileDisplay.hide().catch(() => {
+                });
+                return;
+            }
+
             let hex = bin2hex(binary);
 
             console.info('!! Hex length: ' + hex.length);
@@ -89,7 +111,7 @@ class Upload {
             console.log('File loaded and read');
 
             // start first post
-            console.log('Start creating post');
+            FileDisplay.setTitle('Start creating file post');
 
             SteemUpload.createFilePost(files[0].name, {
                 mime_type: files[0].type,
@@ -99,7 +121,11 @@ class Upload {
                 let hexPart;
                 let current = 0;
 
-                console.log('Parts: ' + parts);
+                console.log('calc');
+                console.log(hex.length, self.partLength);
+
+
+                FileDisplay.setSteps(parts);
 
                 // @todo time delay
                 let process = function () {
@@ -108,19 +134,26 @@ class Upload {
                         current * self.partLength + self.partLength
                     );
 
-                    console.log('Upload ' + current + ' from ' + parts);
-                    //console.log(hexPart);
+                    FileDisplay.setTitle('Upload part ' + parseInt(current + 1) + ' of ' + parts);
+                    FileDisplay.setProgress(current + 1);
 
                     if (hexPart === '') {
                         return Promise.resolve();
                     }
 
                     return SteemUpload.createFileComment(permLink, hexPart).then(function () {
-                        if (current + 1 > parts) {
+                        if (current >= parts) {
                             return Promise.resolve();
                         }
 
                         current = current + 1;
+
+                        FileDisplay.setProgress(current);
+
+
+                        if (current >= parts) {
+                            return Promise.resolve();
+                        }
 
                         return promiseDelay(process, self.timeDelay);
                     }, function (err) {
@@ -135,11 +168,13 @@ class Upload {
                     });
                 };
 
-
-                console.log('Start Uploading');
+                FileDisplay.setTitle('Upload part ' + parseInt(current + 1) + ' of ' + parts);
+                FileDisplay.start();
 
                 return promiseDelay(process, self.timeDelay).then(function () {
                     console.log('done');
+
+                    FileDisplay.done();
 
                     // refresh from
                     return window.List.refresh();

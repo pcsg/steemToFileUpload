@@ -15,8 +15,8 @@ const bin2hex = str => str.split('').reduce((str, glyph) => str += glyph.charCod
 
 const binaryBuffer = function (bin) {
     let length = bin.length;
-    let buf    = new ArrayBuffer(length);
-    let arr    = new Uint8Array(buf);
+    let buf = new ArrayBuffer(length);
+    let arr = new Uint8Array(buf);
 
     for (let i = 0; i < length; i++) {
         arr[i] = bin.charCodeAt(i);
@@ -25,9 +25,24 @@ const binaryBuffer = function (bin) {
     return buf;
 };
 
+/**
+ *
+ * @param u8Array
+ * @returns {string}
+ */
+function convertUint8ArrayToBinaryString(u8Array) {
+    let i, len = u8Array.length, b_str = "";
+
+    for (i = 0; i < len; i++) {
+        b_str += String.fromCharCode(u8Array[i]);
+    }
+
+    return b_str;
+}
 
 export {
     bin2hex,
     hex2bin,
-    binaryBuffer
+    binaryBuffer,
+    convertUint8ArrayToBinaryString
 };

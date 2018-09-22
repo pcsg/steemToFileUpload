@@ -197,6 +197,9 @@ class Login {
         }, {
             duration: 200
         }).promise.then(() => {
+            this.Main.querySelector('.login-main-loader').style.display = '';
+            this.Main.querySelector('.login-main-loader').style.opacity = '1';
+
             return Velocity(this.Main, {
                 borderRadius: '10px',
                 height: 100,
@@ -205,9 +208,7 @@ class Login {
                 duration: 1000,
                 easing: 'easeOutQuint'
             }).promise.then(() => {
-                this.Main.querySelector('.login-main-loader').style.display = '';
-                this.Main.querySelector('.login-main-loader').style.opacity = '1';
-            }).promise;
+            });
         });
     }
 

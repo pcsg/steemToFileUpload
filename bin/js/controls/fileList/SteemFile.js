@@ -30,8 +30,6 @@ class SteemFile {
 
         this.Node = document.createElement('tr');
 
-        console.log(this.data);
-
         this.Node.setAttribute('data-permlink', this.data.permlink);
         this.Node.setAttribute('data-id', this.data.id);
         this.Node.setAttribute('data-author', this.data.author);

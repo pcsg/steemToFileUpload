@@ -53,13 +53,15 @@
 }
 
 .login-main-loader {
+    align-items: center;
     color: #9aa0ac;
+    display: flex;
     font-size: 3em;
     height: 100%;
+    justify-content: center;
     left: 0;
     line-height: 100px;
     position: absolute;
-    text-align: center;
     top: 0;
     width: 100%;
     z-index: 1;
