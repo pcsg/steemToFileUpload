@@ -20,6 +20,7 @@
     margin: 0 auto;
     max-width: 90%;
     padding: 20px;
+    position: relative;
     top: 0;
     width: 500px;
     z-index: 2;
@@ -49,4 +50,17 @@
 
 .login-main label {
     margin-bottom: 20px;
+}
+
+.login-main-loader {
+    color: #9aa0ac;
+    font-size: 3em;
+    height: 100%;
+    left: 0;
+    line-height: 100px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 1;
 }

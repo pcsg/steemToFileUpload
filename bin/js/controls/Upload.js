@@ -14,9 +14,9 @@ import {debugNode} from '../utils/debug';
 class Upload {
 
     constructor() {
-        this.Input      = null;
+        this.Input = null;
         this.partLength = 15000;   // test net = 10000, live net = 200000
-        this.timeDelay  = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
+        this.timeDelay = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
 
         this.blockSizeReachedDelay = 60000;   // test net = 60000
     }
@@ -24,31 +24,51 @@ class Upload {
     /**
      * Opens the upload
      */
-    open() {
+    open(event) {
         if (window.STEEM_USER === '' || window.STEEM_PASS === '') {
             new Login({
                 events: {
-                    onSuccess: this.open.bind(this)
+                    onSuccess: () => {
+                        this.open(event);
+                    }
                 }
-            }).open();
+            }).open().catch(() => {
+            });
 
             return;
         }
 
-        if (!this.Input) {
-            this.Input      = document.createElement('input');
-            this.Input.type = 'file';
-        }
-
         this.Input.click();
+    }
+
+    /**
+     *
+     * @param {HTMLElement} Parent
+     */
+    inject(Parent) {
+        this.Input = document.createElement('input');
+        this.Input.type = 'file';
         this.Input.addEventListener('change', this.onChange.bind(this), false);
+
+        this.Input.style.opacity = '0';
+        this.Input.style.position = 'absolute';
+
+        Parent.appendChild(this.Input);
+        Parent.querySelector('button').addEventListener('click', this.open.bind(this));
+
+        Parent.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            return false;
+        })
     }
 
     /**
      * on change event -> file is selected
      */
     onChange() {
-        let self  = this,
+        let self = this,
             files = this.Input.files;
 
         if (!files.length) {
@@ -56,13 +76,13 @@ class Upload {
         }
 
         let CurrentFile = files[0];
-        let Reader      = new FileReader();
+        let Reader = new FileReader();
 
         // Closure to capture the file information.
         Reader.addEventListener('load', function () {
-            let array  = new Uint8Array(this.result);
+            let array = new Uint8Array(this.result);
             let binary = String.fromCharCode.apply(null, array);
-            let hex    = bin2hex(binary);
+            let hex = bin2hex(binary);
 
             console.info('!! Hex length: ' + hex.length);
             console.info('!! Bin length: ' + binary.length);
@@ -73,9 +93,9 @@ class Upload {
 
             SteemUpload.createFilePost(files[0].name, {
                 mime_type: files[0].type,
-                size     : files[0].size,
+                size: files[0].size,
             }).then(function (permLink) {
-                let parts   = Math.ceil(hex.length / self.partLength);
+                let parts = Math.ceil(hex.length / self.partLength);
                 let hexPart;
                 let current = 0;
 

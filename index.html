@@ -15,10 +15,12 @@
 <div id="page">
     <div id="page-main">
         <header class="header">
-            <button class="upload">
-                <span class="fa fa-upload"></span>
-                Upload
-            </button>
+            <form class="upload">
+                <button>
+                    <span class="fa fa-sign-in-alt"></span>
+                    <span class="upload-text">Login</span>
+                </button>
+            </form>
         </header>
 
         <main class="files"></main>
@@ -34,6 +36,8 @@
 
 <script src="//unpkg.com/dsteem@^0.8.0/dist/dsteem.js"></script>
 <script src="/bin/js/utils/download.js"></script>
+<script src="/bin/js/utils/velocity.min.js"></script>
+
 <script type="module" src="/bin/js/app.js"></script>
 
 </body>

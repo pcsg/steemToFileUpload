@@ -20,7 +20,7 @@ window.STEEM_PASS = '';
 
 window.Client = new dsteem.Client('https://testnet.steem.vc', {
     addressPrefix: 'STX',
-    chainId      : '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
+    chainId: '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
 });
 
 // Load file list
@@ -38,6 +38,4 @@ window.List.inject(FileListNode);
 
 import Upload from "./controls/Upload";
 
-document.querySelector('.upload').addEventListener('click', function () {
-    new Upload().open();
-});
+new Upload().inject(document.querySelector('.upload'));

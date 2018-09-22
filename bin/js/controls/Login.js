@@ -30,10 +30,12 @@ class Login {
 
     /**
      * open the login window
+     *
+     * @return {Promise}
      */
     open() {
         this.Background = document.createElement('div');
-        this.Main       = document.createElement('div');
+        this.Main = document.createElement('div');
 
         this.Background.classList.add('login-background');
 
@@ -44,22 +46,25 @@ class Login {
         });
 
         this.Main.innerHTML = `
-            <h1>STEEM Login</h1>
-            <p>These data are not stored or sent anywhere. As soon as you close your browser window these data are no longer available.</p>
-            
-            <form>
-                <label>
-                    <span>Username</span>
-                    <input type="text" name="username" autofocus/>
-                </label>
+            <div class="login-main-container">
+                <h1>STEEM Login</h1>
+                <p>These data are not stored or sent anywhere. As soon as you close your browser window these data are no longer available.</p>
                 
-                <label>
-                    <span>Password</span>
-                    <input type="password" name="password"/>
-                </label>
-                
-                <input type="submit" value="Login!" />
-            </form>
+                <form>
+                    <label>
+                        <span>Username</span>
+                        <input type="text" name="username" autofocus/>
+                    </label>
+                    
+                    <label>
+                        <span>Password</span>
+                        <input type="password" name="password"/>
+                    </label>
+                    
+                    <input type="submit" value="Login!" />
+                </form>
+            </div>
+            <span class="login-main-loader fas fa-circle-notch fa-spin"></span>
         `;
 
         this.Main.querySelector('form').addEventListener('submit', (event) => {
@@ -69,40 +74,124 @@ class Login {
             return false;
         });
 
+        this.Main.querySelector('.login-main-loader').style.display = 'none';
+        this.Main.querySelector('.login-main-loader').style.opacity = 0;
+
         // show
         this.Background.addEventListener('click', this.close.bind(this));
 
         document.body.appendChild(this.Background);
+
         this.Background.appendChild(this.Main);
+        this.Background.style.opacity = '0';
+
+        this.Main.style.marginTop = '-50px';
+        this.Main.style.opacity = '0';
+
+        return Velocity(this.Background, {
+            opacity: 1
+        }).promise.then(() => {
+            return Velocity(this.Main, {
+                marginTop: 0,
+                opacity: 1
+            }, {
+                duration: 350,
+                easing: "easeInQuad"
+            }).promise.then(function () {
+                // velocity workaround :D
+            });
+        });
     }
 
     /**
      * Close the login
+     *
+     * @reutrn {Promise}
      */
     close() {
-        this.Main.parentNode.removeChild(this.Main);
-        this.Background.parentNode.removeChild(this.Background);
+        Velocity(this.Main, {
+            marginTop: '-50px',
+            opacity: 0
+        }, {
+            duration: 350,
+            easing: "easeOutQuint"
+        });
+
+        Velocity(this.Background, {
+            opacity: 0
+        });
+
+        setTimeout(() => {
+            this.Background.parentNode.removeChild(this.Background);
+        }, 500);
     }
 
     //endregion
 
+    /**
+     * Opens the login
+     */
     login() {
-        // @todo show loader
-
         let username = this.Main.querySelector('[name="username"]').value;
         let password = this.Main.querySelector('[name="password"]').value;
 
-        // check wif
-        let postingKey = dsteem.PrivateKey.fromLogin(username, password, 'posting');
+        this.showLoading().then(() => {
+            // check wif
+            let postingKey = dsteem.PrivateKey.fromLogin(username, password, 'posting');
 
-        // @todo check postingKey
+            // @todo check postingKey
+            console.log(username, password);
 
-        window.STEEM_USER = username;
-        window.STEEM_PASS = password;
+            document.querySelector('.upload button').innerHTML = `
+                <span class="fa fa-upload"></span>
+                <span class="upload-text">Upload</span>
+            `;
 
-        this.close();
-        this.onSuccess();
+            window.STEEM_USER = username;
+            window.STEEM_PASS = password;
+
+            this.hideLoading();
+            this.onSuccess();
+        });
     }
+
+    //region loader
+
+    /**
+     * Shows the loading animation
+     *
+     * @returns {Promise<T | never>}
+     */
+    showLoading() {
+        let Container = this.Main.querySelector('.login-main-container');
+
+        return Velocity(Container, {
+            opacity: 0
+        }, {
+            duration: 200
+        }).promise.then(() => {
+            return Velocity(this.Main, {
+                borderRadius: '10px',
+                height: 100,
+                width: 100
+            }, {
+                duration: 1000,
+                easing: 'easeOutQuint'
+            }).promise.then(() => {
+                this.Main.querySelector('.login-main-loader').style.display = '';
+                this.Main.querySelector('.login-main-loader').style.opacity = '1';
+            }).promise;
+        });
+    }
+
+    /**
+     * Hides the loading animation
+     */
+    hideLoading() {
+        return this.close();
+    }
+
+    //endregion
 }
 
 export default Login;
