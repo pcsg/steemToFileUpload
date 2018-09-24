@@ -24,11 +24,11 @@ class FileUploadDisplay {
             }
         });
 
-        this.Elm = null;
-        this.Title = null;
-        this.Icon = null;
-        this.Status = null;
-        this.Progress = null;
+        this.Elm        = null;
+        this.Title      = null;
+        this.Icon       = null;
+        this.Status     = null;
+        this.Progress   = null;
         this.Background = null;
 
         this.$Animation = null;
@@ -63,10 +63,10 @@ class FileUploadDisplay {
             </div>
         `;
 
-        this.Title = this.Elm.querySelector('.file-upload-display-data-title');
-        this.Status = this.Elm.querySelector('.file-upload-display-data-status');
+        this.Title    = this.Elm.querySelector('.file-upload-display-data-title');
+        this.Status   = this.Elm.querySelector('.file-upload-display-data-status');
         this.Progress = this.Elm.querySelector('.file-upload-display-data-bar-progress');
-        this.Icon = this.Elm.querySelector('.file-upload-display-icon');
+        this.Icon     = this.Elm.querySelector('.file-upload-display-icon');
 
         this.Background.appendChild(this.Elm);
 
@@ -125,10 +125,12 @@ class FileUploadDisplay {
 
         let nextPC = Math.round(100 / (steps / next));
 
-        this.$Animation = Velocity(this.Progress, {
-            width: nextPC + '%'
-        }, {
-            duration: 50000
+        return new Promise(function (resolve) {
+            this.$Animation = Velocity(this.Progress, {
+                width: nextPC + '%'
+            }, {
+                duration: 50000
+            }).promise.then(resolve);
         });
     }
 
@@ -147,7 +149,7 @@ class FileUploadDisplay {
             this.Icon.innerHTML = `<span class="fa fa-check"></span>`;
 
             setTimeout(() => {
-                this.hide().catch(() => {
+                this.hide().then(resolve).catch(() => {
                 });
             }, 1000);
         });
@@ -177,8 +179,8 @@ class FileUploadDisplay {
      * @param {Number} step
      */
     setProgress(step) {
-        let steps = parseInt(this.options.steps);
-        let current = Math.round(steps / step);
+        let steps     = parseInt(this.options.steps);
+        let current   = Math.round(steps / step);
         let currentPC = 100 / current;
 
         if (this.$Animation) {

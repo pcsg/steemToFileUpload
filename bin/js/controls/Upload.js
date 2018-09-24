@@ -5,7 +5,11 @@ import Login from "./Login.js";
 import FileUploadDisplay from "./FileUploadDisplay.js";
 
 import promiseDelay from "../utils/promiseDelay";
-import {bin2hex, convertUint8ArrayToBinaryString} from '../utils/pack';
+
+import {
+    bin2hex,
+    convertUint8ArrayToBinaryString
+} from '../utils/pack';
 
 import {debugNode} from '../utils/debug';
 
@@ -15,9 +19,9 @@ import {debugNode} from '../utils/debug';
 class Upload {
 
     constructor() {
-        this.Input = null;
-        this.partLength = 15000;   // test net = 10000, live net = 200000
-        this.timeDelay = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
+        this.Input      = null;
+        this.partLength = 60000;   // test net = 15000, live net = 60000
+        this.timeDelay  = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
 
         this.blockSizeReachedDelay = 60000;   // test net = 60000
     }
@@ -47,11 +51,11 @@ class Upload {
      * @param {HTMLElement} Parent
      */
     inject(Parent) {
-        this.Input = document.createElement('input');
+        this.Input      = document.createElement('input');
         this.Input.type = 'file';
         this.Input.addEventListener('change', this.onChange.bind(this), false);
 
-        this.Input.style.opacity = '0';
+        this.Input.style.opacity  = '0';
         this.Input.style.position = 'absolute';
 
         Parent.appendChild(this.Input);
@@ -69,7 +73,7 @@ class Upload {
      * on change event -> file is selected
      */
     onChange() {
-        let self = this,
+        let self  = this,
             files = this.Input.files;
 
         if (!files.length) {
@@ -77,7 +81,7 @@ class Upload {
         }
 
         let CurrentFile = files[0];
-        let Reader = new FileReader();
+        let Reader      = new FileReader();
         let FileDisplay = new FileUploadDisplay();
 
         FileDisplay.show();
@@ -90,7 +94,7 @@ class Upload {
             try {
                 let array = new Uint8Array(this.result);
                 //let binary = String.fromCharCode.apply(null, array);
-                binary = convertUint8ArrayToBinaryString(array);
+                binary    = convertUint8ArrayToBinaryString(array);
             } catch (e) {
                 FileDisplay.hide().catch(() => {
                 });
@@ -115,9 +119,9 @@ class Upload {
 
             SteemUpload.createFilePost(files[0].name, {
                 mime_type: files[0].type,
-                size: files[0].size,
+                size     : files[0].size,
             }).then(function (permLink) {
-                let parts = Math.ceil(hex.length / self.partLength);
+                let parts   = Math.ceil(hex.length / self.partLength);
                 let hexPart;
                 let current = 0;
 
@@ -174,7 +178,7 @@ class Upload {
                 return promiseDelay(process, self.timeDelay).then(function () {
                     console.log('done');
 
-                    FileDisplay.done();
+                    FileDisplay.done().catch();
 
                     // refresh from
                     return window.List.refresh();
