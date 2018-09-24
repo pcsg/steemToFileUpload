@@ -106,6 +106,7 @@ class SteemFile {
 
             if (fileContent === '') {
                 console.error('File is corrupt');
+                this.Node.querySelector('button').innerHTML = `<span class="fa fa-bolt"></span>`;
                 return;
             }
 
