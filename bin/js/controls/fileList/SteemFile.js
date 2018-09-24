@@ -104,6 +104,11 @@ class SteemFile {
                 fileContent = fileContent + comments[i].body;
             }
 
+            if (fileContent === '') {
+                console.error('File is corrupt');
+                return;
+            }
+
             let binary = hex2bin(fileContent);
             let array  = binaryBuffer(binary);
 
