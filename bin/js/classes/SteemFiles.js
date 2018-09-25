@@ -9,7 +9,7 @@ class SteemFiles {
      */
     static getFiles() {
         return window.Client.database.getDiscussions('created', {
-            tag: "steemfile",
+            tag  : "steemfile",
             limit: 10
         });
     }

@@ -10,6 +10,8 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 // MAIN STEEM CONFIG
 // ===============================================================
 
+import * as conf from 'conf';
+
 // live
 window.STEEM_PRFX = false;
 window.STEEM_USER = '';
@@ -18,12 +20,14 @@ window.STEEM_PASS = '';
 window.Client = new dsteem.Client('https://api.steemit.com');
 
 // testnet
-// window.STEEM_PRFX = 'STX';
-//
-// window.Client = new dsteem.Client('https://testnet.steem.vc', {
-//     addressPrefix: window.STEEM_PRFX,
-//     chainId      : '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
-// });
+if (conf.DEV) {
+    window.STEEM_PRFX = 'STX';
+
+    window.Client = new dsteem.Client('https://testnet.steem.vc', {
+        addressPrefix: window.STEEM_PRFX,
+        chainId      : '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
+    });
+}
 
 // Load file list
 // ===============================================================

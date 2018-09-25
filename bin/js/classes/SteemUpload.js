@@ -1,5 +1,7 @@
 "use strict";
 
+import * as conf from '../conf';
+
 class SteemUpload {
 
     /**
@@ -24,7 +26,7 @@ class SteemUpload {
 
         let jsonMeta = {
             tags: tagList,
-            app : 'stfu-file-uploader'
+            app : conf.VERSION
         };
 
         if ("mime_type" in fileData) {
@@ -88,7 +90,7 @@ class SteemUpload {
                 body           : data,
                 json_metadata  : JSON.stringify({
                     tags: tagList,
-                    app : 'stfu-file-uploader'
+                    app : conf.VERSION
                 }),
                 parent_author  : window.STEEM_USER,
                 parent_permlink: postPermLink,
