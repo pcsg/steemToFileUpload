@@ -53,11 +53,6 @@ which guarantee a correct use. In the next days / weeks these will be integrated
 - [ ] Fine tuning of the file parameters
 - [ ] Maximum blocksize reached (Show info for longer wating)
 
-
-- ( now - auth.last_root_post ) > STEEM_MIN_ROOT_COMMENT_INTERVAL: 
-    You may only post once every 5 minutes. now=2018-09-29T13:38:57 
-    last_root_post=2018-09-29T13:36:03
-
 What was learned
 ------
 
