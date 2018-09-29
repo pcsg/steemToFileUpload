@@ -125,7 +125,7 @@ class FileUploadDisplay {
 
         let nextPC = Math.round(100 / (steps / next));
 
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             this.$Animation = Velocity(this.Progress, {
                 width: nextPC + '%'
             }, {

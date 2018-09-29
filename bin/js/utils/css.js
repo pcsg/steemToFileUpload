@@ -1,3 +1,7 @@
+"use strict";
+
+import {debugMessage} from './debug';
+
 /**
  * Load a css file
  *
@@ -13,7 +17,7 @@ export default function (url) {
 
         link.onload = function () {
             resolve();
-            console.log('style has loaded');
+            debugMessage('style has loaded');
         };
 
         link.href = url;

@@ -1,8 +1,10 @@
+"use strict";
+
 /**
  *
  * @param func
  * @param delay
- * @returns {Promise<any>}
+ * @returns {Promise}
  */
 export default function (func, delay) {
     return new Promise(function (resolve) {

@@ -2,12 +2,8 @@
 
 import SteemFiles from '../../classes/SteemFiles';
 
-import {
-    hex2bin,
-    binaryBuffer
-} from '../../utils/pack';
-
-import {debugNode} from "../../utils/debug";
+import {binaryBuffer} from '../../utils/pack';
+import {debugMessage} from '../../utils/debug';
 
 /**
  * One STEEM FILE
@@ -100,20 +96,22 @@ class SteemFile {
         SteemFiles.getComments(author, permlink).then(comments => {
             let fileContent = '';
 
+            debugMessage('Comments: ' + comments.length);
+
             for (let i = 0, len = comments.length; i < len; i++) {
                 fileContent = fileContent + comments[i].body;
             }
 
             if (fileContent === '') {
-                console.error('File is corrupt');
+                debugMessage('File is corrupt', 'error');
                 this.Node.querySelector('button').innerHTML = `<span class="fa fa-bolt"></span>`;
                 return;
             }
 
-            let binary = hex2bin(fileContent);
+            let binary = atob(fileContent);
             let array  = binaryBuffer(binary);
 
-            console.info('!! Hex length: ' + fileContent.length);
+            debugMessage('!! Hex length: ' + fileContent.length);
 
             let blob = new Blob([array], {
                 type: jsonMetaData.mime_type

@@ -41,7 +41,7 @@ Missing functionality
 Since this app was cut together under time pressure some functions are missing 
 which guarantee a correct use. In the next days / weeks these will be integrated.
 
-- [ ] Compression of the uploaded files
+- [x] Compression of the uploaded files (base64)
 - [x] Login window
 - [x] Upload progress bar - user must see the upload progress
 - [ ] Real dApp
@@ -53,6 +53,10 @@ which guarantee a correct use. In the next days / weeks these will be integrated
 - [ ] Fine tuning of the file parameters
 - [ ] Maximum blocksize reached (Show info for longer wating)
 
+
+- ( now - auth.last_root_post ) > STEEM_MIN_ROOT_COMMENT_INTERVAL: 
+    You may only post once every 5 minutes. now=2018-09-29T13:38:57 
+    last_root_post=2018-09-29T13:36:03
 
 What was learned
 ------

@@ -5,13 +5,8 @@ import Login from "./Login.js";
 import FileUploadDisplay from "./FileUploadDisplay.js";
 
 import promiseDelay from "../utils/promiseDelay";
-
-import {
-    bin2hex,
-    convertUint8ArrayToBinaryString
-} from '../utils/pack';
-
-import {debugNode} from '../utils/debug';
+import {convertUint8ArrayToBinaryString} from '../utils/pack';
+import {debugMessage} from '../utils/debug';
 
 /**
  * Upload control - uploads a file into the steem blockchain
@@ -21,7 +16,7 @@ class Upload {
     constructor() {
         this.Input      = null;
         this.partLength = 60000;   // test net = 15000, live net = 60000
-        this.timeDelay  = 20000;   // test net = 20000 // at hf20 we can reduce it ;-)
+        this.timeDelay  = 5000;   // test net = 20000 // at hf20 we can reduce it ;-)
 
         this.blockSizeReachedDelay = 60000;   // test net = 60000
     }
@@ -98,7 +93,7 @@ class Upload {
             } catch (e) {
                 FileDisplay.hide().catch(() => {
                 });
-                console.error(e);
+                debugMessage(e, 'error');
                 return;
             }
 
@@ -108,32 +103,36 @@ class Upload {
                 return;
             }
 
-            let hex = bin2hex(binary);
+            //let hex = bin2hex(binary);
+            let b64  = btoa(binary);
+            let data = b64;
 
-            console.info('!! Hex length: ' + hex.length);
-            console.info('!! Bin length: ' + binary.length);
-            console.log('File loaded and read');
+            debugMessage('!! b64 length: ' + b64.length);
+            debugMessage('!! Bin length: ' + binary.length);
+            debugMessage('File loaded and read');
 
             // start first post
             FileDisplay.setTitle('Start creating file post');
+
+            // @todo get last post, because 5min time delay
 
             SteemUpload.createFilePost(files[0].name, {
                 mime_type: files[0].type,
                 size     : files[0].size,
             }).then(function (permLink) {
-                let parts   = Math.ceil(hex.length / self.partLength);
-                let hexPart;
+                let parts   = Math.ceil(data.length / self.partLength);
+                let dataPart;
                 let current = 0;
 
-                console.log('calc');
-                console.log(hex.length, self.partLength);
-
+                debugMessage('data information');
+                debugMessage(data.length, self.partLength);
+                debugMessage('Parts ' + parts);
 
                 FileDisplay.setSteps(parts);
 
-                // @todo time delay
+                // processing one part
                 let process = function () {
-                    hexPart = hex.substr(
+                    dataPart = data.substr(
                         current * self.partLength,
                         current * self.partLength + self.partLength
                     );
@@ -141,11 +140,16 @@ class Upload {
                     FileDisplay.setTitle('Upload part ' + parseInt(current + 1) + ' of ' + parts);
                     FileDisplay.setProgress(current + 1);
 
-                    if (hexPart === '') {
+                    if (dataPart === '') {
+                        debugMessage('nothing todo');
                         return Promise.resolve();
                     }
 
-                    return SteemUpload.createFileComment(permLink, hexPart).then(function () {
+                    debugMessage('Create comment');
+
+                    return SteemUpload.createFileComment(permLink, dataPart).then(function () {
+                        debugMessage('-> comment done');
+
                         if (current >= parts) {
                             return Promise.resolve();
                         }
@@ -161,9 +165,10 @@ class Upload {
 
                         return promiseDelay(process, self.timeDelay);
                     }, function (err) {
-                        //console.log(err);
+                        debugMessage(err, 'error');
+
                         if (err.jse_shortmsg.indexOf('.maximum_block_size') !== -1) {
-                            console.log('maximum blocksize reached, wait 1 minute');
+                            debugMessage('maximum blocksize reached, wait 1 minute');
                             return promiseDelay(process, self.blockSizeReachedDelay);
                         }
 
@@ -176,20 +181,21 @@ class Upload {
                 FileDisplay.start();
 
                 return promiseDelay(process, self.timeDelay).then(function () {
-                    console.log('done');
+                    debugMessage('done');
 
-                    FileDisplay.done().catch();
+                    FileDisplay.done().catch(() => {
+                    });
 
                     // refresh from
                     return window.List.refresh();
                 });
             }).catch(function (err) {
-                console.error(err);
+                debugMessage(err, 'error');
                 alert(err.message);
             });
         });
 
-        console.log('File reading');
+        debugMessage('File reading');
 
         Reader.readAsArrayBuffer(CurrentFile);
     }

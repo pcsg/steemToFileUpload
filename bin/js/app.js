@@ -3,7 +3,13 @@
 // Support
 // ===============================================================
 
-if (window.File && window.FileReader && window.FileList && window.Blob) {
+if (window.File &&
+    window.FileReader &&
+    window.FileList &&
+    window.Blob &&
+    typeof btoa !== 'function' &&
+    typeof atob !== 'function'
+) {
 
 }
 

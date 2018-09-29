@@ -3,6 +3,8 @@
 import SteemFiles from '../../classes/SteemFiles';
 import SteemFile from "./SteemFile";
 
+import {debugMessage} from '../../utils/debug';
+
 /**
  * FileList DOMNode Control
  */
@@ -59,7 +61,7 @@ class SteemFileList {
         Parent.appendChild(this.create());
 
         this.refresh().catch(function (err) {
-            console.log(err);
+            debugMessage(err, 'error');
         });
     }
 

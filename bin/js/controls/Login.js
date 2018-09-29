@@ -35,7 +35,7 @@ class Login {
      */
     open() {
         this.Background = document.createElement('div');
-        this.Main = document.createElement('div');
+        this.Main       = document.createElement('div');
 
         this.Background.classList.add('login-background');
 
@@ -75,7 +75,7 @@ class Login {
         });
 
         this.Main.querySelector('.login-main-loader').style.display = 'none';
-        this.Main.querySelector('.login-main-loader').style.opacity = 0;
+        this.Main.querySelector('.login-main-loader').style.opacity = '0';
 
         // show
         this.Background.addEventListener('click', this.close.bind(this));
@@ -86,17 +86,17 @@ class Login {
         this.Background.style.opacity = '0';
 
         this.Main.style.marginTop = '-50px';
-        this.Main.style.opacity = '0';
+        this.Main.style.opacity   = '0';
 
         return Velocity(this.Background, {
             opacity: 1
         }).promise.then(() => {
             return Velocity(this.Main, {
                 marginTop: 0,
-                opacity: 1
+                opacity  : 1
             }, {
                 duration: 350,
-                easing: "easeInQuad"
+                easing  : "easeInQuad"
             }).promise.then(function () {
                 // velocity workaround :D
             });
@@ -111,10 +111,10 @@ class Login {
     close() {
         return Velocity(this.Main, {
             marginTop: '-50px',
-            opacity: 0
+            opacity  : 0
         }, {
             duration: 350,
-            easing: "easeOutQuint"
+            easing  : "easeOutQuint"
         }).promise.then(() => {
             return Velocity(this.Background, {
                 opacity: 0
@@ -173,13 +173,12 @@ class Login {
             }
 
             let publicPostingKey = result[0].posting.key_auths[0][0];
-            let createdPub = postingKey.createPublic(window.STEEM_PRFX).toString();
+            let createdPub       = postingKey.createPublic(window.STEEM_PRFX).toString();
 
             return publicPostingKey === createdPub;
         }, function () {
             return false;
         });
-
     }
 
     //region loader
@@ -202,11 +201,11 @@ class Login {
 
             return Velocity(this.Main, {
                 borderRadius: '10px',
-                height: 100,
-                width: 100
+                height      : 100,
+                width       : 100
             }, {
                 duration: 1000,
-                easing: 'easeOutQuint'
+                easing  : 'easeOutQuint'
             }).promise.then(() => {
             });
         });
