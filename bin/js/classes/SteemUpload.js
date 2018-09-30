@@ -1,6 +1,7 @@
 "use strict";
 
 import * as conf from '../conf';
+import {debugMessage} from "../utils/debug";
 
 class SteemUpload {
 
@@ -78,6 +79,8 @@ class SteemUpload {
      * @param postPermLink
      * @param data - hex file part data
      * @returns {Promise}
+     *
+     * @deprecated
      */
     static createFileComment(postPermLink, data) {
         let wif      = dsteem.PrivateKey.fromLogin(window.STEEM_USER, window.STEEM_PASS, 'posting');
@@ -117,6 +120,83 @@ class SteemUpload {
             wif
         );
     }
+
+    //region transactions
+
+    /**
+     * Create a json transaction for a file part
+     *
+     * @param {String} data
+     * @return {Promise}
+     */
+    static createFilePart(data) {
+        const json = `{"d":"${data}", "t": "c"}`;
+
+        debugMessage('Send tx');
+        debugMessage(json);
+
+        if (data === '') {
+            return Promise.reject('Empty file part not allowed');
+        }
+
+        return this.broadcastJson(json);
+    }
+
+    /**
+     * Create a json transaction for a file part
+     *
+     * @param {Array} txList
+     * @return {Promise}
+     */
+    static createMainFile(txList) {
+        const list = txList.map(function (tx) {
+            return tx.id + ',' + tx.blockNum
+        }).join(';');
+
+        debugMessage('Send tx');
+        debugMessage(list);
+
+        if (list === '') {
+            return Promise.reject('Empty file part not allowed');
+        }
+
+        return this.broadcastJson(JSON.stringify({
+            tx: list
+        }));
+    }
+
+    /**
+     *
+     * @param fileData
+     * @return {Promise}
+     */
+    static createFileInfo(fileData) {
+        return this.broadcastJson(JSON.stringify({
+            name: fileData.name,
+            mime: fileData.mime,
+            size: fileData.size,
+            t   : 'i'
+        }));
+    }
+
+    /**
+     *
+     * @param {String} jsonString
+     * @return {*|Promise<any>}
+     */
+    static broadcastJson(jsonString) {
+        const wif = dsteem.PrivateKey.fromLogin(window.STEEM_USER, window.STEEM_PASS, 'active');
+        const id  = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase();
+
+        return window.Client.broadcast.json({
+            required_auths        : [window.STEEM_USER],
+            required_posting_auths: [],
+            id                    : id,
+            json                  : jsonString
+        }, wif);
+    }
+
+    //endregion
 }
 
 export default SteemUpload;

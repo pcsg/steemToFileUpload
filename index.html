@@ -23,7 +23,19 @@
             </form>
         </header>
 
-        <main class="files"></main>
+        <form class="download-file">
+            <h2>Download File</h2>
+            <label>
+                <input type="text" name="download" placeholder="Insert the filename..."/>
+                <button name="start-download" disabled>
+                    <span class="fa fa-download"></span>
+                </button>
+            </label>
+        </form>
+
+        <main class="files">
+            <h2>Public files</h2>
+        </main>
     </div>
 
     <footer>
@@ -36,7 +48,8 @@
 
 <script src="//unpkg.com/dsteem@^0.10.1/dist/dsteem.js"></script>
 <script src="/bin/js/utils/download.js"></script>
-<script src="/bin/js/utils/velocity.min.js"></script>
+<script src="/bin/js/utils/moofx.js"></script>
+<script src="/bin/js/utils/moofx.promise.js"></script>
 
 <script type="module" src="/bin/js/app.js"></script>
 

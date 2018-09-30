@@ -24,11 +24,11 @@ class FileUploadDisplay {
             }
         });
 
-        this.Elm        = null;
-        this.Title      = null;
-        this.Icon       = null;
-        this.Status     = null;
-        this.Progress   = null;
+        this.Elm = null;
+        this.Title = null;
+        this.Icon = null;
+        this.Status = null;
+        this.Progress = null;
         this.Background = null;
 
         this.$Animation = null;
@@ -63,10 +63,10 @@ class FileUploadDisplay {
             </div>
         `;
 
-        this.Title    = this.Elm.querySelector('.file-upload-display-data-title');
-        this.Status   = this.Elm.querySelector('.file-upload-display-data-status');
+        this.Title = this.Elm.querySelector('.file-upload-display-data-title');
+        this.Status = this.Elm.querySelector('.file-upload-display-data-status');
         this.Progress = this.Elm.querySelector('.file-upload-display-data-bar-progress');
-        this.Icon     = this.Elm.querySelector('.file-upload-display-icon');
+        this.Icon = this.Elm.querySelector('.file-upload-display-icon');
 
         this.Background.appendChild(this.Elm);
 
@@ -83,11 +83,13 @@ class FileUploadDisplay {
 
     /**
      * inject the file display into the body
+     *
+     * @return {Promise}
      */
     show() {
         this.inject(document.body);
 
-        Velocity(this.Elm, {
+        return mooPFX(this.Elm, {
             opacity: 1
         });
     }
@@ -98,39 +100,14 @@ class FileUploadDisplay {
      * @return {Promise}
      */
     hide() {
-        return Velocity(this.Elm, {
+        return mooPFX(this.Elm, {
             opacity: 0
-        }).promise.then(() => {
-            return Velocity(this.Background, {
+        }).then(() => {
+            return mooPFX(this.Background, {
                 opacity: 0
-            }).promise.then(() => {
-                this.Background.parentNode.removeChild(this.Background);
             });
-        });
-    }
-
-    /**
-     * Set
-     */
-    start(next) {
-        let steps = parseInt(this.options.steps);
-
-        if (typeof next === 'undefined') {
-            next = 1;
-        }
-
-        if (next > steps) {
-            next = steps;
-        }
-
-        let nextPC = Math.round(100 / (steps / next));
-
-        return new Promise((resolve) => {
-            this.$Animation = Velocity(this.Progress, {
-                width: nextPC + '%'
-            }, {
-                duration: 50000
-            }).promise.then(resolve);
+        }).then(() => {
+            this.Background.parentNode.removeChild(this.Background);
         });
     }
 
@@ -138,18 +115,15 @@ class FileUploadDisplay {
      * File upload is done
      * Execute the done step and hide the file upload
      *
-     * @returns {Promise<any>}
+     * @returns {Promise}
      */
     done() {
+        this.Icon.innerHTML = `<span class="fa fa-check"></span>`;
+
         return new Promise((resolve) => {
-            if (this.$Animation) {
-                Velocity(this.Progress, 'stop');
-            }
-
-            this.Icon.innerHTML = `<span class="fa fa-check"></span>`;
-
             setTimeout(() => {
-                this.hide().then(resolve).catch(() => {
+                this.hide().then(resolve).catch((e) => {
+                    console.error(e);
                 });
             }, 1000);
         });
@@ -175,24 +149,22 @@ class FileUploadDisplay {
     }
 
     /**
+     * Animate the progress bar
      *
      * @param {Number} step
+     * @return {Promise}
      */
     setProgress(step) {
-        let steps     = parseInt(this.options.steps);
-        let current   = Math.round(steps / step);
+        let steps = parseInt(this.options.steps);
+        let current = steps / step;
+        current = Math.round(current * 100) / 100;
+
         let currentPC = 100 / current;
 
-        if (this.$Animation) {
-            Velocity(this.Progress, 'stop');
-        }
-
-        Velocity(this.Progress, {
+        return mooPFX(this.Progress, {
             width: currentPC + '%'
         }, {
             duration: 200
-        }).promise.then(() => {
-            this.start(current + 1);
         });
     }
 

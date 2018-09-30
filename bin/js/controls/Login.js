@@ -35,7 +35,7 @@ class Login {
      */
     open() {
         this.Background = document.createElement('div');
-        this.Main       = document.createElement('div');
+        this.Main = document.createElement('div');
 
         this.Background.classList.add('login-background');
 
@@ -86,19 +86,17 @@ class Login {
         this.Background.style.opacity = '0';
 
         this.Main.style.marginTop = '-50px';
-        this.Main.style.opacity   = '0';
+        this.Main.style.opacity = '0';
 
-        return Velocity(this.Background, {
+        return mooPFX(this.Background, {
             opacity: 1
-        }).promise.then(() => {
-            return Velocity(this.Main, {
+        }).then(() => {
+            return mooPFX(this.Main, {
                 marginTop: 0,
-                opacity  : 1
+                opacity: 1
             }, {
                 duration: 350,
-                easing  : "easeInQuad"
-            }).promise.then(function () {
-                // velocity workaround :D
+                easing: "easeInQuad"
             });
         });
     }
@@ -109,16 +107,16 @@ class Login {
      * @reutrn {Promise}
      */
     close() {
-        return Velocity(this.Main, {
+        return mooPFX(this.Main, {
             marginTop: '-50px',
-            opacity  : 0
+            opacity: 0
         }, {
             duration: 350,
-            easing  : "easeOutQuint"
-        }).promise.then(() => {
-            return Velocity(this.Background, {
+            easing: "easeOutQuint"
+        }).then(() => {
+            return mooPFX(this.Background, {
                 opacity: 0
-            }).promise.then(() => {
+            }).then(() => {
                 this.Background.parentNode.removeChild(this.Background);
             });
         });
@@ -173,7 +171,7 @@ class Login {
             }
 
             let publicPostingKey = result[0].posting.key_auths[0][0];
-            let createdPub       = postingKey.createPublic(window.STEEM_PRFX).toString();
+            let createdPub = postingKey.createPublic(window.STEEM_PRFX).toString();
 
             return publicPostingKey === createdPub;
         }, function () {
@@ -191,22 +189,21 @@ class Login {
     showLoading() {
         let Container = this.Main.querySelector('.login-main-container');
 
-        return Velocity(Container, {
+        return mooPFX(Container, {
             opacity: 0
         }, {
             duration: 200
-        }).promise.then(() => {
+        }).then(() => {
             this.Main.querySelector('.login-main-loader').style.display = '';
             this.Main.querySelector('.login-main-loader').style.opacity = '1';
 
-            return Velocity(this.Main, {
+            return mooPFX(this.Main, {
                 borderRadius: '10px',
-                height      : 100,
-                width       : 100
+                height: 100,
+                width: 100
             }, {
                 duration: 1000,
-                easing  : 'easeOutQuint'
-            }).promise.then(() => {
+                easing: 'easeOutQuint'
             });
         });
     }

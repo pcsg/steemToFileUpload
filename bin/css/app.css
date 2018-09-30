@@ -70,6 +70,11 @@ body {
     width: 500px;
 }
 
+.files h2 {
+    font-size: 14px;
+    padding: 0 1.5rem;
+}
+
 .files table {
     border-collapse: collapse;
     width: 100%;
@@ -121,6 +126,59 @@ body {
 .files button.download:hover {
     background: #467fcf;
     color: #fff;
+}
+
+/** Download one file via file path
+ =================================================== */
+
+form.download-file {
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    display: block;
+    margin: 40px auto 0;
+    max-width: 90%;
+    padding: 0 1.5rem 1.5rem;
+    width: 500px;
+}
+
+form.download-file h2 {
+    font-size: 16px;
+    padding: 0;
+}
+
+form.download-file input {
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px 0 0 3px;
+    color: #495057;
+    display: block;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    padding: 0.375rem 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    width: calc(100% - 50px);
+}
+
+form.download-file label {
+    display: flex;
+}
+
+form.download-file button {
+    background: #edf2fa;
+    border: 1px solid #467fcf;
+    border-radius: 0 3px 3px 0;
+    color: #467fcf;
+    cursor: pointer;
+    width: 50px;
+}
+
+form.download-file button:disabled {
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    color: #9aa0ac;
+    cursor: default;
 }
 
 /** Footer

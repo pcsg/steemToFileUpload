@@ -28,11 +28,11 @@ if (conf.DEV) {
 
     window.Client = new dsteem.Client('https://testnet.steem.vc', {
         addressPrefix: window.STEEM_PRFX,
-        chainId      : '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
+        chainId: '79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673'
     });
 } else {
     window.STEEM_PRFX = false;
-    window.Client     = new dsteem.Client('https://api.steemit.com');
+    window.Client = new dsteem.Client('https://api.steemit.com');
 }
 
 // Load file list
@@ -51,3 +51,46 @@ window.List.inject(FileListNode);
 import Upload from "./controls/Upload";
 
 new Upload().inject(document.querySelector('.upload'));
+
+// file download
+// ===============================================================
+
+import SteemFiles from "./classes/SteemFiles";
+
+const Download = document.querySelector('[name="download"]');
+const DownloadForm = document.querySelector('form.download-file');
+const DownloadButton = document.querySelector('[name="start-download"]');
+
+DownloadForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    let file = Download.value.trim();
+
+    if (file === '') {
+        return;
+    }
+
+    SteemFiles.download(
+        file.split('-')[0],
+        file.split('-')[1]
+    ).then(function (fileData) {
+        download(fileData.blob, fileData.name);
+    });
+
+    return false;
+});
+
+Download.addEventListener('keyup', function (event) {
+    if (event.which === 13) { // enter
+        DownloadForm.submit();
+        return;
+    }
+
+    let value = Download.value;
+
+    DownloadButton.disabled = true;
+
+    if (value.indexOf('-') !== -1) {
+        DownloadButton.disabled = false;
+    }
+});
