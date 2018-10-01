@@ -122,8 +122,6 @@ class SteemFiles {
                 }
 
                 if (json.t === 'c') {
-                    console.warn(json.d);
-
                     fileContent = fileContent + json.d;
                 }
             }
