@@ -1,8 +1,9 @@
 "use strict";
 
-import SteemUpload from "../classes/SteemUpload";
 import Login from "./Login.js";
 import FileUploadDisplay from "./FileUploadDisplay.js";
+import SteemUpload from "../classes/SteemUpload.js";
+import SteemFileWindow from "./SteemFileWindow.js";
 
 import promiseDelay from "../utils/promiseDelay";
 import {convertUint8ArrayToBinaryString} from '../utils/pack';
@@ -14,9 +15,9 @@ import {debugMessage} from '../utils/debug';
 class Upload {
 
     constructor() {
-        this.Input = null;
-        this.partLength = 1500;   // test net = 15000, live net = 60000
-        this.timeDelay = 2000;   // test net = 20000 // at hf20 we can reduce it ;-)
+        this.Input                 = null;
+        this.partLength            = 1500;   // test net = 15000, live net = 60000
+        this.timeDelay             = 2000;   // test net = 20000 // at hf20 we can reduce it ;-)
         this.maxPartsForHiddenFile = 50;
 
         this.FileDisplay = null;
@@ -49,11 +50,11 @@ class Upload {
      * @param {HTMLElement} Parent
      */
     inject(Parent) {
-        this.Input = document.createElement('input');
+        this.Input      = document.createElement('input');
         this.Input.type = 'file';
         this.Input.addEventListener('change', this.onChange.bind(this), false);
 
-        this.Input.style.opacity = '0';
+        this.Input.style.opacity  = '0';
         this.Input.style.position = 'absolute';
 
         Parent.appendChild(this.Input);
@@ -71,7 +72,7 @@ class Upload {
      * on change event -> file is selected
      */
     onChange() {
-        let self = this,
+        let self  = this,
             files = this.Input.files;
 
         if (!files.length) {
@@ -79,7 +80,7 @@ class Upload {
         }
 
         let CurrentFile = files[0];
-        let Reader = new FileReader();
+        let Reader      = new FileReader();
 
         this.FileDisplay = new FileUploadDisplay();
 
@@ -93,7 +94,7 @@ class Upload {
             try {
                 let array = new Uint8Array(this.result);
                 //let binary = String.fromCharCode.apply(null, array);
-                binary = convertUint8ArrayToBinaryString(array);
+                binary    = convertUint8ArrayToBinaryString(array);
             } catch (e) {
                 self.FileDisplay.hide().catch(() => {
                 });
@@ -110,7 +111,7 @@ class Upload {
             }
 
             //let hex = bin2hex(binary);
-            let b64 = btoa(binary);
+            let b64  = btoa(binary);
             let data = b64;
 
             debugMessage('!! b64 length: ' + b64.length);
@@ -145,8 +146,8 @@ class Upload {
      * @returns {Promise}
      */
     upload(data, fileMeta) {
-        let self = this;
-        let parts = Math.ceil(data.length / this.partLength);
+        let self    = this;
+        let parts   = Math.ceil(data.length / this.partLength);
         let dataPart;
         let current = 0;
 
@@ -181,7 +182,7 @@ class Upload {
                 debugMessage(result);
 
                 tx.push({
-                    id: result.id,
+                    id      : result.id,
                     blockNum: result.block_num
                 });
 
@@ -214,7 +215,7 @@ class Upload {
             console.warn(result);
 
             tx.push({
-                id: result.id,
+                id      : result.id,
                 blockNum: result.block_num
             });
 
@@ -222,22 +223,19 @@ class Upload {
             return SteemUpload.createMainFile(tx);
         }).then(function (mainTx) {
             self.FileDisplay.done();
-            self.showUploadWindow(mainTx.id + '-' + mainTx.block_num);
+
+            new SteemFileWindow({
+                file    : mainTx.id + '-' + mainTx.block_num,
+                message : `
+                    <p>Your upload was successful! Remember the following filename well, 
+                    if you forget it, it'll be hard to get back your file.</p>
+                    <p>You can now find your file at the following address:</p>`,
+                postable: true
+            }).open();
 
             // refresh from
             return window.List.refresh();
         });
-    }
-
-    /**
-     *
-     * @param filePath
-     */
-    showUploadWindow(filePath) {
-        debugMessage('File ID: ');
-        debugMessage(filePath);
-
-
     }
 
     /**
@@ -248,9 +246,9 @@ class Upload {
     uploadWithComments() {
         SteemUpload.createFilePost(files[0].name, {
             mime_type: files[0].type,
-            size: files[0].size,
+            size     : files[0].size,
         }).then(function (permLink) {
-            let parts = Math.ceil(data.length / self.partLength);
+            let parts   = Math.ceil(data.length / self.partLength);
             let dataPart;
             let current = 0;
 
